@@ -183,6 +183,22 @@
                 </tr>
                 </tbody>
             </table>
+            <div class="card">
+                <div class="card-header">
+                    Preset
+                </div>
+                <div class="card-body">
+                    <label for="presetSelect">Select Network Condition</label>
+                    <select id="presetSelect" class="form-control">
+                        <option value="">Please select...</option>
+                        {% for preset_id, preset in presets.items() %}
+                            <option value="{{ preset_id }}">{{ preset.label }}</option>
+                        {% endfor %}
+                    </select>
+                    <small id="presetDescription" class="form-text text-muted mt-2"></small>
+                </div>
+            </div>
+
             <div class="btn-container">
                 <input class="pure-button pure-button-primary" type="submit" value="Apply {{ rule['name'] }} ({{ rule['ip'] }}) Rules">
             </div>
@@ -251,5 +267,33 @@
         }
     })();
 </script>
+<script>
+    // Preset data from Python
+    const PRESETS = {{ presets_json|safe }};
+
+    const presetSelect = document.getElementById('presetSelect');
+    const presetDescription = document.getElementById('presetDescription');
+
+    presetSelect.addEventListener('change', function () {
+        const id = this.value;
+        const preset = PRESETS[id];
+
+        if (!preset) {
+            presetDescription.textContent = '';
+            return;
+        }
+
+        // Display the description
+        presetDescription.textContent = preset.description || '';
+
+        // Map keys in fields to input[name=...] and populate values
+        Object.entries(preset.fields).forEach(([name, value]) => {
+            const el = document.querySelector(`[name="${name}"]`);
+            if (!el) return;
+            el.value = value;
+        });
+    });
+</script>
+
 </body>
 </html>

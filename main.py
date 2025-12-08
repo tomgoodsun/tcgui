@@ -1,6 +1,7 @@
 """TC web GUI."""
 
 import argparse
+import json
 import os
 import re
 import subprocess
@@ -23,6 +24,7 @@ BANDWIDTH_UNITS = [
 
 STANDARD_UNIT = "mbit"
 
+PRESETS = {}
 
 app = Flask(__name__)
 PATTERN = None
@@ -30,6 +32,13 @@ DEV_LIST = None
 
 app.static_folder = "static"
 
+def load_presets():
+    global PRESETS
+    try:
+        with open("presets.json", encoding="utf-8") as f:
+            PRESETS = json.load(f)
+    except FileNotFoundError:
+        PRESETS = {}
 
 def parse_arguments():
     parser = argparse.ArgumentParser(
@@ -75,6 +84,8 @@ def main():
         units=BANDWIDTH_UNITS,
         standard_unit=STANDARD_UNIT,
         interfaces=interfaces,
+        presets=PRESETS,
+        presets_json=json.dumps(PRESETS, ensure_ascii=False),
     )
 
 
@@ -259,6 +270,7 @@ if __name__ == "__main__":
 
     # TC Variables
     args = parse_arguments()
+    load_presets()
 
     PATTERN = re.compile(args.regex) if args.regex else args.regex
     DEV_LIST = args.dev
