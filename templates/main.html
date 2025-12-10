@@ -119,7 +119,7 @@
     {% for rule in rules %}
     <div>
         <h2 id="{{ rule['name'] }}">{{ rule['name'] }} ({{ rule['ip'] }})</h2>
-        <form method="POST" action="{{ url_for('new_rule', interface=rule['name']) }}">
+        <form method="POST" action="{{ url_for('new_rule', interface=rule['name']) }}" class="form-{{ rule['name'] }}">
             <table class="pure-table">
                 <thead>
                 <tr>
@@ -188,8 +188,8 @@
                     Preset
                 </div>
                 <div class="card-body">
-                    <label for="presetSelect">Select Network Condition</label>
-                    <select id="presetSelect" class="form-control">
+                    <label for="preset-selector-{{ rule['name'] }}">Select Network Condition</label>
+                    <select id="preset-selector-{{ rule['name'] }}" class="preset-selector" class="form-control">
                         <option value="">Please select...</option>
                         {% for preset_id, preset in presets.items() %}
                             <option value="{{ preset_id }}">{{ preset.label }}</option>
@@ -271,12 +271,30 @@
     // Preset data from Python
     const PRESETS = {{ presets_json|safe }};
 
-    const presetSelect = document.getElementById('presetSelect');
-    const presetDescription = document.getElementById('presetDescription');
+    const selectors = document.getElementById('preset-selector');
 
-    presetSelect.addEventListener('change', function () {
+    selectors.forEach(function (selector) {
+        selector.addEventListener('change', function () {
+            const id = this.value;
+            const preset = PRESETS[id];
+
+            if (!preset) {
+                return;
+            }
+
+            // Map keys in fields to input[name=...] and populate values
+            Object.entries(preset.fields).forEach(([name, value]) => {
+                const el = document.querySelector(`[name="${name}"]`);
+                if (!el) return;
+                el.value = value;
+            });
+        });
+    });
+
+    presetSelect.addEventListener('change', function (evt) {
         const id = this.value;
         const preset = PRESETS[id];
+        const form = evt.target.form;
 
         if (!preset) {
             presetDescription.textContent = '';
@@ -288,7 +306,7 @@
 
         // Map keys in fields to input[name=...] and populate values
         Object.entries(preset.fields).forEach(([name, value]) => {
-            const el = document.querySelector(`[name="${name}"]`);
+            const el = form.querySelector(`[name="${name}"]`);
             if (!el) return;
             el.value = value;
         });
