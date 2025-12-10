@@ -1,9 +1,9 @@
 {
-  "enabledInterfaces": [
+  "enabled_interfaces": [
     "eth0",
     "wlan0"
   ],
-  "valuePresets": {
+  "value_presets": {
     "lte_crowded": {
       "label": "4G (Rural, Slightly Crowded)",
       "description": "Simulates a slightly slow and occasionally interrupted mobile connection.",

@@ -191,7 +191,7 @@
                     <label for="preset-selector-{{ rule['name'] }}">Select Network Condition</label>
                     <select id="preset-selector-{{ rule['name'] }}" class="preset-selector" class="form-control">
                         <option value="">Please select...</option>
-                        {% for preset_id, preset in presets.items() %}
+                        {% for preset_id, preset in settings.value_presets.items() %}
                             <option value="{{ preset_id }}">{{ preset.label }}</option>
                         {% endfor %}
                     </select>
@@ -276,7 +276,7 @@
 
     sections.forEach(function (section) {
         const id = section.id;
-        if (SETTINGS.enabledInterfaces && SETTINGS.enabledInterfaces.includes(id)) {
+        if (SETTINGS.enabled_interfaces && SETTINGS.enabled_interfaces.includes(id)) {
             section.style.display = 'block';
         } else {
             section.style.display = 'none';
@@ -286,7 +286,7 @@
     selectors.forEach(function (selector) {
         selector.addEventListener('change', function (evt) {
             const id = this.value;
-            const preset = SETTINGS.valuePresets[id];
+            const preset = SETTINGS.value_presets[id];
             const form = evt.target.form;
 
             if (!preset) {
