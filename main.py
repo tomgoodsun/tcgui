@@ -24,7 +24,7 @@ BANDWIDTH_UNITS = [
 
 STANDARD_UNIT = "mbit"
 
-PRESETS = {}
+SETTINGS = {}
 
 app = Flask(__name__)
 PATTERN = None
@@ -32,13 +32,13 @@ DEV_LIST = None
 
 app.static_folder = "static"
 
-def load_presets():
-    global PRESETS
+def load_settings():
+    global SETTINGS
     try:
-        with open("presets.json", encoding="utf-8") as f:
-            PRESETS = json.load(f)
+        with open("settings.json", encoding="utf-8") as f:
+            SETTINGS = json.load(f)
     except FileNotFoundError:
-        PRESETS = {}
+        SETTINGS = {}
 
 def parse_arguments():
     parser = argparse.ArgumentParser(
@@ -84,8 +84,8 @@ def main():
         units=BANDWIDTH_UNITS,
         standard_unit=STANDARD_UNIT,
         interfaces=interfaces,
-        presets=PRESETS,
-        presets_json=json.dumps(PRESETS, ensure_ascii=False),
+        settings=SETTINGS,
+        settings_json=json.dumps(SETTINGS, ensure_ascii=False),
     )
 
 
@@ -270,7 +270,7 @@ if __name__ == "__main__":
 
     # TC Variables
     args = parse_arguments()
-    load_presets()
+    load_settings()
 
     PATTERN = re.compile(args.regex) if args.regex else args.regex
     DEV_LIST = args.dev

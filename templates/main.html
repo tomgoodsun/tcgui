@@ -117,7 +117,7 @@
     </ul>
 
     {% for rule in rules %}
-    <div>
+    <div id="if-{{ rule['name'] }}" class="interface-section">
         <h2 id="{{ rule['name'] }}">{{ rule['name'] }} ({{ rule['ip'] }})</h2>
         <form method="POST" action="{{ url_for('new_rule', interface=rule['name']) }}" class="form-{{ rule['name'] }}">
             <table class="pure-table">
@@ -269,14 +269,24 @@
 </script>
 <script>
     // Preset data from Python
-    const PRESETS = {{ presets_json|safe }};
+    const SETTINGS = {{ settings_json|safe }};
 
+    const sections = document.querySelectorAll('.interface-section');
     const selectors = document.querySelectorAll('.preset-selector');
+
+    sections.forEach(function (section) {
+        const id = section.id;
+        if (SETTINGS.enabledInterfaces && SETTINGS.enabledInterfaces.includes(id)) {
+            section.style.display = 'block';
+        } else {
+            section.style.display = 'none';
+        }
+    });
 
     selectors.forEach(function (selector) {
         selector.addEventListener('change', function (evt) {
             const id = this.value;
-            const preset = PRESETS[id];
+            const preset = SETTINGS.valuePresets[id];
             const form = evt.target.form;
 
             if (!preset) {
