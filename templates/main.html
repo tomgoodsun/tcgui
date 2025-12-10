@@ -274,9 +274,10 @@
     const selectors = document.querySelectorAll('.preset-selector');
 
     selectors.forEach(function (selector) {
-        selector.addEventListener('change', function () {
+        selector.addEventListener('change', function (evt) {
             const id = this.value;
             const preset = PRESETS[id];
+            const form = evt.target.form;
 
             if (!preset) {
                 return;
@@ -284,31 +285,10 @@
 
             // Map keys in fields to input[name=...] and populate values
             Object.entries(preset.fields).forEach(([name, value]) => {
-                const el = document.querySelector(`[name="${name}"]`);
+                const el = form.querySelector(`[name="${name}"]`);
                 if (!el) return;
                 el.value = value;
             });
-        });
-    });
-
-    presetSelect.addEventListener('change', function (evt) {
-        const id = this.value;
-        const preset = PRESETS[id];
-        const form = evt.target.form;
-
-        if (!preset) {
-            presetDescription.textContent = '';
-            return;
-        }
-
-        // Display the description
-        presetDescription.textContent = preset.description || '';
-
-        // Map keys in fields to input[name=...] and populate values
-        Object.entries(preset.fields).forEach(([name, value]) => {
-            const el = form.querySelector(`[name="${name}"]`);
-            if (!el) return;
-            el.value = value;
         });
     });
 </script>
