@@ -117,7 +117,7 @@
     </ul>
 
     {% for rule in rules %}
-    <div id="if-{{ rule['name'] }}" class="interface-section">
+    <div id="if-{{ rule['name'] }}" class="interface-section" data-interface-name="{{ rule['name'] }}">
         <h2 id="{{ rule['name'] }}">{{ rule['name'] }} ({{ rule['ip'] }})</h2>
         <form method="POST" action="{{ url_for('new_rule', interface=rule['name']) }}" class="form-{{ rule['name'] }}">
             <table class="pure-table">
@@ -275,8 +275,8 @@
     const selectors = document.querySelectorAll('.preset-selector');
 
     sections.forEach(function (section) {
-        const id = section.id;
-        if (SETTINGS.enabled_interfaces && SETTINGS.enabled_interfaces.includes(id)) {
+        const name = section.dataset.interfaceName;
+        if (SETTINGS.enabled_interfaces && SETTINGS.enabled_interfaces.includes(name)) {
             section.style.display = 'block';
         } else {
             section.style.display = 'none';
