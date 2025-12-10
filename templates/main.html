@@ -271,7 +271,7 @@
     // Preset data from Python
     const PRESETS = {{ presets_json|safe }};
 
-    const selectors = document.getElementById('preset-selector');
+    const selectors = document.querySelectorAll('.preset-selector');
 
     selectors.forEach(function (selector) {
         selector.addEventListener('change', function () {
