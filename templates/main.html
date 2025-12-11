@@ -65,6 +65,16 @@
             background-color: #f1f8e9;
         }
 
+        .preset-container {
+            text-align: center;
+        }
+
+        .preset-container label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+
         .btn-container {
             text-align: center;
             margin-top: 20px;
@@ -183,20 +193,15 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="card">
-                <div class="card-header">
-                    Preset
-                </div>
-                <div class="card-body">
-                    <label for="preset-selector-{{ rule['name'] }}">Select Network Condition</label>
-                    <select id="preset-selector-{{ rule['name'] }}" class="preset-selector" class="form-control">
-                        <option value="">Please select...</option>
-                        {% for preset_id, preset in settings.value_presets.items() %}
-                            <option value="{{ preset_id }}">{{ preset.label }}</option>
-                        {% endfor %}
-                    </select>
-                    <small id="presetDescription" class="form-text text-muted mt-2"></small>
-                </div>
+            <div class="preset-container">
+                <label for="preset-selector-{{ rule['name'] }}">Network Condition Preset</label>
+                <select id="preset-selector-{{ rule['name'] }}" class="preset-selector" class="form-control">
+                    <option value="">Please select...</option>
+                    {% for preset_id, preset in settings.value_presets.items() %}
+                        <option value="{{ preset_id }}">{{ preset.label }}</option>
+                    {% endfor %}
+                </select>
+                <small id="preset-description" class="form-text text-muted mt-2"></small>
             </div>
 
             <div class="btn-container">
