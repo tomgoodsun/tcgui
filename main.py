@@ -172,6 +172,7 @@ def run_ip_command(command_args):
 
 
 def get_active_rules():
+    global SETTINGS
     proc = subprocess.Popen(["tc", "qdisc"], stdout=subprocess.PIPE)
     output = proc.communicate()[0].decode()
     lines = output.split("\n")[:-1]
@@ -181,6 +182,10 @@ def get_active_rules():
         arguments = line.split()
         rule = parse_rule(arguments)
         if rule["name"] and rule["name"] not in dev:
+            if len(SETTINGS["enabled_interfaces"]) == 0:
+                continue
+            if rule["name"] not in SETTINGS["enabled_interfaces"]:
+                continue
             rule["ip"] = get_interface_ip(rule["name"])
             rules.append(rule)
             dev.add(rule["name"])
