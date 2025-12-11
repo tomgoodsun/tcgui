@@ -276,27 +276,7 @@
     // Preset data from Python
     const SETTINGS = {{ settings_json|safe }};
 
-    const sections = document.querySelectorAll('.interface-section');
-    const interfaceList = document.querySelectorAll('.interface-list li');
     const selectors = document.querySelectorAll('.preset-selector');
-
-    sections.forEach(function (section) {
-        const name = section.dataset.interfaceName;
-        if (SETTINGS.enabled_interfaces && SETTINGS.enabled_interfaces.includes(name)) {
-            section.style.display = 'block';
-        } else {
-            section.style.display = 'none';
-        }
-    });
-
-    interfaceList.forEach(function (item) {
-        const name = item.dataset.interfaceName;
-        if (SETTINGS.enabled_interfaces && SETTINGS.enabled_interfaces.includes(name)) {
-            item.style.display = 'list-item';
-        } else {
-            item.style.display = 'none';
-        }
-    });
 
     selectors.forEach(function (selector) {
         selector.addEventListener('change', function (evt) {
