@@ -98,8 +98,8 @@
     },
     "weak_signal": {
       "label": {
-        "en": "弱い電波（かろうじて接続）",
-        "ja": "Weak Signal Level (Barely Connected)"
+        "en": "Weak Signal Level (Barely Connected)",
+        "ja": "弱い電波（かろうじて接続）"
       },
       "description": {
         "en": "Simulates a weak signal connection with frequent interruptions.",
