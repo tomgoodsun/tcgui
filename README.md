@@ -34,6 +34,11 @@ sudo python3 main.py
 
 The tool will read your interfaces and the current setup every time the site is reloaded
 
+### Preset
+
+You can use your own `setting.json` which defines preset settings and filtering interfaces.  
+Use `settings.json` copying from `settings.sample.json`.
+
 ## Docker
 
 You can use docker to run this application. Run with host network (`--network host`) and network admin capabilities (`--cap-add=NET_ADMIN`). Site will be available on default port Ex: `http://dockerhost:5000`
