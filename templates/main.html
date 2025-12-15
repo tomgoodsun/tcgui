@@ -197,11 +197,17 @@
                 <label for="preset-selector-{{ rule['name'] }}">Network Condition Preset</label>
                 <select id="preset-selector-{{ rule['name'] }}" class="preset-selector" class="form-control">
                     <option value="">Please select...</option>
-                    {% for preset_id, preset in settings.value_presets.items() %}
-                        <option value="{{ preset_id }}">{{ preset.label }}</option>
+                    {% for preset_id, preset in settings["value_presets"].items() %}
+                        <option value="{{ preset_id }}">
+                            {% if preset.label is mapping %}
+                                {{ preset.label.get("ja", preset.label.get("en", preset_id)) }}
+                            {% else %}
+                                {{ preset.label }}
+                            {% endif %}
+                        </option>
                     {% endfor %}
                 </select>
-                <small id="preset-description" class="form-text text-muted mt-2"></small>
+                <small class="preset-description form-text text-muted mt-2"></small>
             </div>
 
             <div class="btn-container">
@@ -274,23 +280,36 @@
 </script>
 <script>
     // Preset data from Python
-    const SETTINGS = {{ settings_json|safe }};
+    const SETTINGS = {{ settings|tojson }};
 
-    const selectors = document.querySelectorAll('.preset-selector');
+    function pickLangValue(v) {
+        // v: string or {ja,en,...}
+        if (v && typeof v === "object") {
+            return v.ja || v.en || "";
+        }
+        return v || "";
+    }
 
-    selectors.forEach(function (selector) {
-        selector.addEventListener('change', function (evt) {
-            const id = this.value;
-            const preset = SETTINGS.value_presets[id];
-            const form = evt.target.form;
+    document.querySelectorAll(".preset-selector").forEach((select) => {
+        select.addEventListener("change", function () {
+            const presetId = this.value;
+            const preset = (SETTINGS.value_presets || {})[presetId];
+
+            const container = this.closest("form") || this.closest(".card") || document;
+            const descEl = container.querySelector(".preset-description");
 
             if (!preset) {
+                if (descEl) descEl.textContent = "";
                 return;
             }
 
-            // Map keys in fields to input[name=...] and populate values
-            Object.entries(preset.fields).forEach(([name, value]) => {
-                const el = form.querySelector(`[name="${name}"]`);
+            if (descEl) {
+                descEl.textContent = pickLangValue(preset.description);
+            }
+
+            const fields = preset.fields || {};
+            Object.entries(fields).forEach(([name, value]) => {
+                const el = container.querySelector(`[name="${name}"]`);
                 if (!el) return;
                 el.value = value;
             });

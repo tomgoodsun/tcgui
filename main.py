@@ -182,9 +182,10 @@ def get_active_rules():
         arguments = line.split()
         rule = parse_rule(arguments)
         if rule["name"] and rule["name"] not in dev:
-            if len(SETTINGS["enabled_interfaces"]) == 0:
+            enabled = SETTINGS.get("enabled_interfaces", [])
+            if len(enabled) == 0:
                 continue
-            if rule["name"] not in SETTINGS["enabled_interfaces"]:
+            if rule["name"] not in enabled:
                 continue
             rule["ip"] = get_interface_ip(rule["name"])
             rules.append(rule)
