@@ -20,7 +20,7 @@
         "DelayVariance": "10",
         "Loss": "2",
         "LossCorrelation": "",
-        "Duplicate": "0.5",
+        "Duplicate": "1",
         "Reorder": "1",
         "ReorderCorrelation": "",
         "Corrupt": "",
@@ -41,7 +41,7 @@
         "rate_unit": "mbit",
         "Delay": "150",
         "DelayVariance": "30",
-        "Loss": "0.1",
+        "Loss": "1",
         "LossCorrelation": "",
         "Duplicate": "",
         "Reorder": "",
@@ -60,7 +60,7 @@
         "ja": "エレベーター内や建物奥など、ほぼ切断状態の通信を再現します。"
       },
       "fields": {
-        "Rate": "0.2",
+        "Rate": "1",
         "rate_unit": "mbit",
         "Delay": "300",
         "DelayVariance": "100",
@@ -87,7 +87,7 @@
         "rate_unit": "mbit",
         "Delay": "80",
         "DelayVariance": "20",
-        "Loss": "0.5",
+        "Loss": "1",
         "LossCorrelation": "",
         "Duplicate": "",
         "Reorder": "",
@@ -106,7 +106,7 @@
         "ja": "電波が弱く、頻繁に途切れる接続を再現します。"
       },
       "fields": {
-        "Rate": "0.5",
+        "Rate": "1",
         "rate_unit": "mbit",
         "Delay": "200",
         "DelayVariance": "50",
@@ -115,7 +115,7 @@
         "Duplicate": "1",
         "Reorder": "3",
         "ReorderCorrelation": "25",
-        "Corrupt": "0.5",
+        "Corrupt": "1",
         "Limit": "100"
       }
     }
