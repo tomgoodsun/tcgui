@@ -11,3 +11,6 @@ services:
       - NET_ADMIN
     ## Uncomment if you want to control the traffic of the host machine:
     network_mode: host
+
+    # Automatic restart policy
+    #restart: always

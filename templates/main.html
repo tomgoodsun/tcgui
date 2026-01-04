@@ -65,6 +65,21 @@
             background-color: #f1f8e9;
         }
 
+        .preset-container {
+            text-align: center;
+        }
+
+        .preset-container label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .preset-description {
+            color: #555;
+            height: 1.4rem;
+            margin-top: 10px;
+        }
+
         .btn-container {
             text-align: center;
             margin-top: 20px;
@@ -110,16 +125,16 @@
 
 <div class="container">
     <h1>TCGUI - {{ rules|length }} Available Interfaces</h1>
-    <ul>
+    <ul class="interface-list">
         {% for rule in rules %}
-        <li><a href="#{{ rule['name'] }}">{{ rule['name'] }} ({{ rule['ip'] }})</a></li>
+        <li data-interface-name="{{ rule['name'] }}"><a href="#{{ rule['name'] }}">{{ rule['name'] }} ({{ rule['ip'] }})</a></li>
         {% endfor %}
     </ul>
 
     {% for rule in rules %}
-    <div>
+    <div id="if-{{ rule['name'] }}" class="interface-section" data-interface-name="{{ rule['name'] }}">
         <h2 id="{{ rule['name'] }}">{{ rule['name'] }} ({{ rule['ip'] }})</h2>
-        <form method="POST" action="{{ url_for('new_rule', interface=rule['name']) }}">
+        <form method="POST" action="{{ url_for('new_rule', interface=rule['name']) }}" class="form-{{ rule['name'] }}">
             <table class="pure-table">
                 <thead>
                 <tr>
@@ -183,6 +198,23 @@
                 </tr>
                 </tbody>
             </table>
+            <div class="preset-container">
+                <label for="preset-selector-{{ rule['name'] }}">Network Condition Preset</label>
+                <select id="preset-selector-{{ rule['name'] }}" class="preset-selector" class="form-control">
+                    <option value="">Please select...</option>
+                    {% for preset_id, preset in settings["value_presets"].items() %}
+                        <option value="{{ preset_id }}">
+                            {% if preset.label is mapping %}
+                                {{ preset.label.get("ja", preset.label.get("en", preset_id)) }}
+                            {% else %}
+                                {{ preset.label }}
+                            {% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+                <div class="preset-description form-text text-muted mt-2"></div>
+            </div>
+
             <div class="btn-container">
                 <input class="pure-button pure-button-primary" type="submit" value="Apply {{ rule['name'] }} ({{ rule['ip'] }}) Rules">
             </div>
@@ -251,5 +283,44 @@
         }
     })();
 </script>
+<script>
+    // Preset data from Python
+    const SETTINGS = {{ settings|tojson }};
+
+    function pickLangValue(v) {
+        // v: string or {ja,en,...}
+        if (v && typeof v === "object") {
+            return v.ja || v.en || "";
+        }
+        return v || "";
+    }
+
+    document.querySelectorAll(".preset-selector").forEach((select) => {
+        select.addEventListener("change", function () {
+            const presetId = this.value;
+            const preset = (SETTINGS.value_presets || {})[presetId];
+
+            const container = this.closest("form") || this.closest(".card") || document;
+            const descEl = container.querySelector(".preset-description");
+
+            if (!preset) {
+                if (descEl) descEl.textContent = "";
+                return;
+            }
+
+            if (descEl) {
+                descEl.textContent = pickLangValue(preset.description);
+            }
+
+            const fields = preset.fields || {};
+            Object.entries(fields).forEach(([name, value]) => {
+                const el = container.querySelector(`[name="${name}"]`);
+                if (!el) return;
+                el.value = value;
+            });
+        });
+    });
+</script>
+
 </body>
 </html>

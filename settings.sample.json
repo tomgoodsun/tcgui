@@ -1,0 +1,123 @@
+{
+  "enabled_interfaces": [
+    "eth0",
+    "wlan0"
+  ],
+  "value_presets": {
+    "public_wifi": {
+      "label": {
+        "en": "Public WiFi (Cafe / Hotel)",
+        "ja": "公衆WiFi（カフェ・ホテル）"
+      },
+      "description": {
+        "en": "Simulates a congested public WiFi with unstable throughput.",
+        "ja": "利用者が多い公衆WiFiで、速度が不安定な状況を再現します。"
+      },
+      "fields": {
+        "Rate": "5",
+        "rate_unit": "mbit",
+        "Delay": "40",
+        "DelayVariance": "10",
+        "Loss": "2",
+        "LossCorrelation": "",
+        "Duplicate": "1",
+        "Reorder": "1",
+        "ReorderCorrelation": "",
+        "Corrupt": "",
+        "Limit": "200"
+      }
+    },
+    "overseas_vpn": {
+      "label": {
+        "en": "Overseas VPN Connection",
+        "ja": "海外VPN接続"
+      },
+      "description": {
+        "en": "Simulates high-latency but stable overseas VPN traffic.",
+        "ja": "海外拠点や海外クラウドへのVPN接続時の高遅延通信を再現します。"
+      },
+      "fields": {
+        "Rate": "20",
+        "rate_unit": "mbit",
+        "Delay": "150",
+        "DelayVariance": "30",
+        "Loss": "1",
+        "LossCorrelation": "",
+        "Duplicate": "",
+        "Reorder": "",
+        "ReorderCorrelation": "",
+        "Corrupt": "",
+        "Limit": "1000"
+      }
+    },
+    "almost_disconnected": {
+      "label": {
+        "en": "Almost Disconnected",
+        "ja": "ほぼ切断状態"
+      },
+      "description": {
+        "en": "Simulates an extremely unstable connection near disconnection.",
+        "ja": "エレベーター内や建物奥など、ほぼ切断状態の通信を再現します。"
+      },
+      "fields": {
+        "Rate": "1",
+        "rate_unit": "mbit",
+        "Delay": "300",
+        "DelayVariance": "100",
+        "Loss": "15",
+        "LossCorrelation": "30",
+        "Duplicate": "2",
+        "Reorder": "5",
+        "ReorderCorrelation": "",
+        "Corrupt": "1",
+        "Limit": "50"
+      }
+    },
+    "lte_crowded": {
+      "label": {
+        "en": "4G (Rural, Slightly Crowded)",
+        "ja": "4G（郊外・やや混雑）"
+      },
+      "description": {
+        "en": "Simulates a slightly slow and occasionally interrupted mobile connection.",
+        "ja": "やや遅く、時折途切れるモバイル接続を再現します。"
+      },
+      "fields": {
+        "Rate": "8",
+        "rate_unit": "mbit",
+        "Delay": "80",
+        "DelayVariance": "20",
+        "Loss": "1",
+        "LossCorrelation": "",
+        "Duplicate": "",
+        "Reorder": "",
+        "ReorderCorrelation": "",
+        "Corrupt": "",
+        "Limit": "500"
+      }
+    },
+    "weak_signal": {
+      "label": {
+        "en": "Weak Signal Level (Barely Connected)",
+        "ja": "弱い電波（かろうじて接続）"
+      },
+      "description": {
+        "en": "Simulates a weak signal connection with frequent interruptions.",
+        "ja": "電波が弱く、頻繁に途切れる接続を再現します。"
+      },
+      "fields": {
+        "Rate": "1",
+        "rate_unit": "mbit",
+        "Delay": "200",
+        "DelayVariance": "50",
+        "Loss": "5",
+        "LossCorrelation": "25",
+        "Duplicate": "1",
+        "Reorder": "3",
+        "ReorderCorrelation": "25",
+        "Corrupt": "1",
+        "Limit": "100"
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 """TC web GUI."""
 
 import argparse
+import json
 import os
 import re
 import subprocess
@@ -23,6 +24,7 @@ BANDWIDTH_UNITS = [
 
 STANDARD_UNIT = "mbit"
 
+SETTINGS = {}
 
 app = Flask(__name__)
 PATTERN = None
@@ -30,6 +32,13 @@ DEV_LIST = None
 
 app.static_folder = "static"
 
+def load_settings():
+    global SETTINGS
+    try:
+        with open("settings.json", encoding="utf-8") as f:
+            SETTINGS = json.load(f)
+    except FileNotFoundError:
+        SETTINGS = {}
 
 def parse_arguments():
     parser = argparse.ArgumentParser(
@@ -75,6 +84,8 @@ def main():
         units=BANDWIDTH_UNITS,
         standard_unit=STANDARD_UNIT,
         interfaces=interfaces,
+        settings=SETTINGS,
+        settings_json=json.dumps(SETTINGS, ensure_ascii=False),
     )
 
 
@@ -161,6 +172,7 @@ def run_ip_command(command_args):
 
 
 def get_active_rules():
+    global SETTINGS
     proc = subprocess.Popen(["tc", "qdisc"], stdout=subprocess.PIPE)
     output = proc.communicate()[0].decode()
     lines = output.split("\n")[:-1]
@@ -170,6 +182,11 @@ def get_active_rules():
         arguments = line.split()
         rule = parse_rule(arguments)
         if rule["name"] and rule["name"] not in dev:
+            enabled = SETTINGS.get("enabled_interfaces", [])
+            if len(enabled) == 0:
+                continue
+            if rule["name"] not in enabled:
+                continue
             rule["ip"] = get_interface_ip(rule["name"])
             rules.append(rule)
             dev.add(rule["name"])
@@ -259,6 +276,7 @@ if __name__ == "__main__":
 
     # TC Variables
     args = parse_arguments()
+    load_settings()
 
     PATTERN = re.compile(args.regex) if args.regex else args.regex
     DEV_LIST = args.dev
